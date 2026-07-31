@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Your Name | Software Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Ambient 3D space background (Three.js) -->
+  <canvas id="bg-canvas"></canvas>
+  <div id="nebula-overlay"></div>
+
+  <!-- Full screen canvas used only for the asteroid crash transition -->
+  <canvas id="transition-canvas"></canvas>
+
+  <!-- Flash overlay for impact -->
+  <div id="impact-flash"></div>
+
+  <div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand" data-nav="home">
+        <div class="avatar">
+          <img class="avatar-img" src="images/avataaars.png" alt="Bhushan Sonawane" onerror="this.style.display='none'">
+          <span class="avatar-fallback"></span>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">Bhushan</span>
+        </div>
+      </div>
+
+      <nav class="nav-icons">
+        <button class="nav-btn active" data-nav="home" data-label="Home">
+          <svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/><path d="M9.5 20v-6h5v6"/></svg>
+        </button>
+        <button class="nav-btn" data-nav="about" data-label="About">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20c1.6-4 4.4-6 7.5-6s5.9 2 7.5 6"/></svg>
+        </button>
+        <button class="nav-btn" data-nav="skills" data-label="Skills">
+          <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M8 7.5 16 7.5M7.5 8.3 11 16M16.5 8.3 13 16"/></svg>
+        </button>
+        <button class="nav-btn" data-nav="experience" data-label="Experience">
+          <svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-9"/><path d="M15 6h6v6"/></svg>
+        </button>
+        <button class="nav-btn" data-nav="work" data-label="Work">
+          <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="13" rx="1.5"/><path d="M8 5V3.6c0-.3.3-.6.6-.6h6.8c.3 0 .6.3.6.6V5"/><path d="M3 13h18"/></svg>
+        </button>
+        <button class="nav-btn" data-nav="certs" data-label="Certificates">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14 7 21l5-2.5L17 21l-1.5-7"/></svg>
+        </button>
+        <button class="nav-btn" data-nav="contact" data-label="Contact">
+          <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="m3.5 6 8.5 7 8.5-7"/></svg>
+        </button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <a href="https://www.linkedin.com/in/bhushan-rajendra-sonawane-7841ba329/" class="social" data-label="LinkedIn" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7.5 10.5v6M7.5 7.7v.1M12 16.5v-3.7c0-1.3.9-2.3 2.2-2.3 1.2 0 2 .9 2 2.3v3.7"/></svg></a>
+        <a href="https://github.com/Bhushan334" class="social" data-label="GitHub" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.2-.3-4.6-1.1-4.6-4.9 0-1.1.4-2 1-2.6-.1-.3-.4-1.3.1-2.6 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.3.2 2.3.1 2.6.6.6 1 1.5 1 2.6 0 3.8-2.4 4.6-4.6 4.9.4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"/></svg></a>
+        <a href="https://www.instagram.com/b_h_u_s_h_a_n_7_/" class="social" data-label="Instagram" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1"/></svg></a>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="content">
+
+      <!-- HOME -->
+      <section class="page active" id="page-home">
+        <div class="hero">
+          <div class="hero-text">
+            
+            <h1>Hello!!,<br>I'm <span class="accent">Bhushan Rajendra Sonawane</span>,<br>Software Developer.</h1>
+            
+            <p class="tagline"> Turning Ideas into Code.
+            <button class="cta" data-nav="contact">Contact Me</button>
+          </div>
+          <div class="hero-photo">
+            <div class="photo-frame">
+              <img src="images/Bhushan.jpeg" alt="Bhushan Sonawane" class="profile-photo">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section class="page" id="page-about">
+        
+        <h1>ABOUT ME</h1>
+        
+        <div class="about-grid">
+          <div class="about-text">
+            <p>Hi, I'm <a href="#">Bhushan Rajendra Sonawane</a> from Nashik, Maharashtra. I am currently pursuing a <a href="#">Bachelor of Engineering</a> in <a href="#">Information Technology</a> at NBN Sinhgad Technical Institutes Campus, Pune, where I have maintained an almost consistent <a href="#">9 CGPA</a> throughout my academic journey.</p>
+            <p>I recently completed a <a href="#">Java Full Stack Development Internship</a> at <a href="#">CodTech IT Solutions Pvt. Ltd.</a>, where I gained hands-on experience in building full-stack applications and working with industry-standard development practices.</p>
+            <p>I enjoy solving complex problems and building software that creates real-world impact. One of my key projects, <a href="#">QueueLess</a>, is a real-time public transport assistant that provides intelligent departure recommendations to help users reduce waiting time. I also developed <a href="#">DocMind AI</a>, an AI-powered knowledge assistant that enables users to interact with documents using Retrieval-Augmented Generation (RAG). Working on these projects strengthened my understanding of scalable backend development, real-time systems, and AI integration.</p>
+            <p>My technical expertise includes <a href="#">Java, Data Structures and Algorithms, Spring Boot, React.js, MySQL, and core Computer Science fundamentals</a>. I have also earned <a href="#">HackerRank certifications</a> in <a href="#">Java, SQL, and React</a>, reflecting my dedication to continuous learning and strengthening my technical skills.</p>
+            <p>I am passionate about learning new technologies, taking on challenging problems, and continuously improving as a software engineer. My goal is to build reliable, scalable, and impactful software while collaborating with talented teams and contributing to meaningful products.</p>
+          </div>
+          <div class="resume-card">
+            
+            <h2>MY RESUME</h2>
+            
+            <a href="assets/Bhushan Sonawane Resume.pdf" class="resume-btn">Click here to view PDF</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- EXPERIENCE -->
+      <section class="page" id="page-experience">
+        
+        <h1>Experience</h1>
+        
+        <div class="exp-list">
+          <div class="exp-item">
+            <span class="exp-date mono">Jan 2026 — Apr 2026</span>
+            <div class="exp-body">
+              <h3>Java Full Stack Development Intern</h3>
+              <p class="exp-org">CODTECH IT SOLUTIONS Pvt.Ltd.  - [Remote]</p>
+            </div>
+          </div>
+        </div>
+
+        <h1 class="subhead">Education</h1>
+        <div class="exp-list">
+          <div class="exp-item">
+            <span class="exp-date mono">2023 — 2027</span>
+            <div class="exp-body">
+              <h3>NBN Sinhgad Technical Institutes Campus, Pune</h3>
+              <p class="exp-org">Bachelor of Engineering, Information Technology</p>
+              <p>CGPA: 9.08</p>
+            </div>
+          </div>
+          <div class="exp-item">
+            <span class="exp-date mono">2021 — 2022</span>
+            <div class="exp-body">
+              <h3>Maharani Usharaje Holkar Junior College, Chandwad</h3>
+              <p class="exp-org">XII Maharashtra State Board</p>
+              <p>Percentage: 83.17%</p>
+            </div>
+          </div>
+          <div class="exp-item">
+            <span class="exp-date mono">2019 — 2020</span>
+            <div class="exp-body">
+              <h3>Jawahar Navodaya Vidyalaya, Nashik</h3>
+              <p class="exp-org">X CBSE</p>
+              <p>Percentage: 91%</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SKILLS -->
+      <section class="page" id="page-skills">
+        <div class="skills-bg" id="skills-floaters"></div>
+        
+        <h1>Skills</h1>
+        
+
+        <div class="skill-block">
+          <p class="skill-label">Programming Languages</p>
+          <div class="pill-row">
+            <span class="pill">Java</span><span class="pill">Python</span><span class="pill">C++</span>
+            <span class="pill">JavaScript</span><span class="pill">TypeScript</span><span class="pill">SQL</span>
+          </div>
+        </div>
+        <div class="skill-block">
+          <p class="skill-label">Core Computer Science</p>
+          <div class="pill-row">
+            <span class="pill">Data Structures &amp; Algorithms</span><span class="pill">System Design</span>
+            <span class="pill">Object-Oriented Programming</span><span class="pill">Operating Systems</span>
+            <span class="pill">DBMS</span><span class="pill">Distributed Systems</span><span class="pill">Computer Networks</span>
+          </div>
+        </div>
+        <div class="skill-block">
+          <p class="skill-label">Backend &amp; Distributed Systems</p>
+          <div class="pill-row">
+            <span class="pill">Spring Boot</span><span class="pill">REST APIs</span>
+            <span class="pill">Microservices</span><span class="pill">Redis</span>
+          </div>
+        </div>
+        <div class="skill-block">
+          <p class="skill-label">Cloud &amp; DevOps</p>
+          <div class="pill-row">
+            <span class="pill">Docker</span><span class="pill">Kubernetes</span><span class="pill">AWS</span>
+            <span class="pill">Git</span><span class="pill">Linux</span>
+          </div>
+        </div>
+        <div class="skill-block">
+          <p class="skill-label">AI &amp; Machine Learning</p>
+          <div class="pill-row">
+            <span class="pill">Scikit-learn</span><span class="pill">TensorFlow</span><span class="pill">Pandas</span>
+            <span class="pill">NumPy</span><span class="pill">Applied ML</span><span class="pill">Generative AI</span>
+            <span class="pill">LLMs</span><span class="pill">Model Deployment &amp; Inference</span>
+          </div>
+        </div>
+        <div class="skill-block">
+          <p class="skill-label">Developer Tools</p>
+          <div class="pill-row">
+            <span class="pill">Github</span><span class="pill">Visual Studio Code</span><span class="pill">IntelliJ IDEA</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- WORK / PROJECTS -->
+      <section class="page" id="page-work">
+        <div class="work-intro">
+          
+          <h1>My Projects</h1>
+          
+          <p> As an Information Technology student, I enjoy transforming ideas into real-world software solutions. I've built projects across full-stack development, artificial intelligence, machine learning, and modern web technologies, with a strong focus on solving practical problems and creating seamless user experiences. Here are some of the projects that best showcase my skills, curiosity, and commitment to continuous learning.</p>
+        </div>
+        <div class="project-grid">
+          <a class="project-card" href="https://github.com/Bhushan334/QueueLess" target="_blank" rel="noopener" style="--accent:#7fe0a7">
+            <h3>QueueLess</h3>
+            <p class="project-sub">QueueLess is a universal smart queue management platform that lets users join live queues, track wait times in real time, and receive intelligent "Leave Now" recommendations for hospitals, banks, government offices, restaurants, petrol pumps, and more. **Because people should spend their time living their lives, not standing in lines.**</p>
+            <div class="tag-row"><span class="tag">React.js</span><span class="tag">Spring Boot</span><span class="tag">MySql</span><span class="tag">Docker</span><span class="tag">Redis</span></div>
+          </a>
+          <a class="project-card" href="https://github.com/Bhushan334/DocMind-AI-RAG-Based-System" target="_blank" rel="noopener" style="--accent:#ff9d5c">
+            <h3>DocMind AI</h3>
+            <p class="project-sub">An open-source RAG (Retrieval-Augmented Generation) system that lets you ask questions about your documents with verified, cited answers. Built with hybrid retrieval (BM25 + vector search), cross-encoder re-ranking, citation enforcement. DocMind eliminates hallucinations through intelligent pre and post-generation guardrails.</p>
+            <div class="tag-row"><span class="tag">Python</span><span class="tag">Streamlit</span><span class="tag">LangChain</span><span class="tag">Ollama</span><span class="tag">FastAPI</span></div>
+          </a>
+          <a class="project-card" href="https://github.com/Bhushan334/Fintech-Hub-Online-Banking-Project" target="_blank" rel="noopener" style="--accent:#7db8ff">
+            <h3>Fintech Hub</h3>
+            <p class="project-sub">Fintech Hub is a secure online banking platform that enables users to manage accounts, transfer funds, pay bills, and track transactions seamlessly. Built with modern full-stack technologies, it delivers a fast, reliable, and user-friendly digital banking experience.</p>
+            <div class="tag-row"><span class="tag">React.js</span><span class="tag">Spring Boot</span><span class="tag">MySql</span><span class="tag">Stripe Payment</span></div>
+          </a>
+          <a class="project-card" href="https://github.com/Bhushan334/SeaShield-AI" target="_blank" rel="noopener" style="--accent:#c99bff">
+            <h3>SeaShield AI</h3>
+            <p class="project-sub">This project successfully developed a machine learning model to predict ocean pollution levels using water quality parameters. The use of Random Forest and other techniques provided reliable results. The system improves efficiency and supports data-driven environmental decision-making, helping protect marine ecosystems.</p>
+            <div class="tag-row"><span class="tag">NumPy</span><span class="tag">Pandas</span><span class="tag">Matplotlib</span><span class="tag">Scikit-learn</span></div>
+          </a>
+          <a class="project-card" href="https://github.com/Bhushan334/The-Wallchart" target="_blank" rel="noopener" style="--accent:#ff8a8a">
+            <h3>The Wallchart</h3>
+            <p class="project-sub">This is a FIFA World Cup 2026 Bracket Challenge application that allows users to predict the outcomes of tournament matches. Users can select winners for each stage and automatically advance teams through the bracket. The platform provides an interactive and engaging way for football fans to create and track their World Cup predictions.</p>
+            <div class="tag-row"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span></div>
+          </a>
+          <a class="project-card" href="https://github.com/Bhushan334/Myntra-Clone-Project" target="_blank" rel="noopener" style="--accent:#8ad4ff">
+            <h3>Myntra Clone</h3>
+            <p class="project-sub">Myntra Clone is a static e-commerce website that replicates the look and feel of the original Myntra platform. It features a clean homepage, product listings, promotional banners, and intuitive navigation. Designed to deliver a seamless and visually appealing browsing experience.</p>
+            <div class="tag-row"><span class="tag">HTML</span><span class="tag">CSS</span></div>
+          </a>
+        </div>
+      </section>
+
+      <!-- CERTIFICATES -->
+      <section class="page" id="page-certs">
+        <div class="work-intro">
+          
+          <h1>My Certificates</h1>
+          
+          <p>Alongside my academic journey, I have earned multiple industry-recognised certificates. These reflect my continuous learning and commitment to building strong technical foundations. Wanna take a quick view?</p>
+        </div>
+        <div class="cert-grid">
+          <a class="cert-card" href="assets/Java-Certificate.pdf" target="_blank" rel="noopener">
+            <img class="cert-thumb" src="images/Java Certificate.png" alt="Java Certificate" loading="lazy" onerror="this.style.display='none'; this.closest('.cert-card').classList.add('no-thumb');">
+            <span class="cert-name">Certificate 1</span>
+          </a>
+          <a class="cert-card" href="assets/sql_advanced certificate.pdf" target="_blank" rel="noopener">
+            <img class="cert-thumb" src="images/SQL Certificate.png" alt="SQL Advanced Certificate" loading="lazy" onerror="this.style.display='none'; this.closest('.cert-card').classList.add('no-thumb');">
+            <span class="cert-name">Certificate 2</span>
+          </a>
+          <a class="cert-card" href="assets/frontend_developer_react certificate.pdf" target="_blank" rel="noopener">
+            <img class="cert-thumb" src="images/React Certificate.png" alt="Frontend Developer React Certificate" loading="lazy" onerror="this.style.display='none'; this.closest('.cert-card').classList.add('no-thumb');">
+            <span class="cert-name">Certificate 3</span>
+          </a>
+          <a class="cert-card" href="assets/Generative AI Coursera(Adobe).pdf" target="_blank" rel="noopener">
+            <img class="cert-thumb" src="images/Adobe Certificate.png" alt="Generative AI Coursera Adobe Certificate" loading="lazy" onerror="this.style.display='none'; this.closest('.cert-card').classList.add('no-thumb');">
+            <span class="cert-name">Certificate 4</span>
+          </a>
+          <a class="cert-card" href="assets/Edunet AIML Certificate.pdf" target="_blank" rel="noopener">
+            <img class="cert-thumb" src="images/Edunet Certificate.png" alt="Edunet AIML Certificate" loading="lazy" onerror="this.style.display='none'; this.closest('.cert-card').classList.add('no-thumb');">
+            <span class="cert-name">Certificate 5</span>
+          </a>
+          <a class="cert-card" href="assets/Python-Certificate.pdf" target="_blank" rel="noopener">
+            <img class="cert-thumb" src="images/Python Certificate.png" alt="Python Certificate" loading="lazy" onerror="this.style.display='none'; this.closest('.cert-card').classList.add('no-thumb');">
+            <span class="cert-name">Certificate 6</span>
+          </a>
+          <a class="cert-card" href="assets/java_basic certificate.pdf" target="_blank" rel="noopener">
+            <img class="cert-thumb" src="images/Java HackerRank Certificate.png" alt="Java Basic Certificate" loading="lazy" onerror="this.style.display='none'; this.closest('.cert-card').classList.add('no-thumb');">
+            <span class="cert-name">Certificate 7</span>
+          </a>
+          <a class="cert-card" href="assets/Cpp Certificate.pdf" target="_blank" rel="noopener">
+            <img class="cert-thumb" src="images/CPP Certificate.png" alt="C++ Certificate" loading="lazy" onerror="this.style.display='none'; this.closest('.cert-card').classList.add('no-thumb');">
+            <span class="cert-name">Certificate 8</span>
+          </a>
+          <a class="cert-card" href="assets/Digital Edge 101.pdf" target="_blank" rel="noopener">
+            <img class="cert-thumb" src="images/Digital Edge 101.png" alt="Digital Edge 101 Certificate" loading="lazy" onerror="this.style.display='none'; this.closest('.cert-card').classList.add('no-thumb');">
+            <span class="cert-name">Certificate 9</span>
+          </a>
+          <a class="cert-card" href="assets/Gen AI 101.pdf" target="_blank" rel="noopener">
+            <img class="cert-thumb" src="images/Gen AI 101.png" alt="Gen AI 101 Certificate" loading="lazy" onerror="this.style.display='none'; this.closest('.cert-card').classList.add('no-thumb');">
+            <span class="cert-name">Certificate 10</span>
+          </a>
+          <a class="cert-card" href="assets/Gen AI Tools.PDF" target="_blank" rel="noopener">
+            <img class="cert-thumb" src="images/Gen AI Tools.png" alt="Gen AI Tools Certificate" loading="lazy" onerror="this.style.display='none'; this.closest('.cert-card').classList.add('no-thumb');">
+            <span class="cert-name">Certificate 11</span>
+          </a>
+          <a class="cert-card" href="assets/Introduction to AI Certificate.pdf" target="_blank" rel="noopener">
+            <img class="cert-thumb" src="images/Introduction to AI Certificate.png" alt="Introduction to AI Certificate" loading="lazy" onerror="this.style.display='none'; this.closest('.cert-card').classList.add('no-thumb');">
+            <span class="cert-name">Certificate 12</span>
+          </a>
+          <a class="cert-card" href="assets/Introduction to Generative AI Certificate.pdf" target="_blank" rel="noopener">
+            <img class="cert-thumb" src="images/Introduction to Gen AI Certificate.png" alt="Introduction to Generative AI Certificate" loading="lazy" onerror="this.style.display='none'; this.closest('.cert-card').classList.add('no-thumb');">
+            <span class="cert-name">Certificate 13</span>
+          </a>
+
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section class="page" id="page-contact">
+        <div class="contact-grid">
+          <div class="contact-form-wrap">
+            
+            <h1>CONTACT ME</h1>
+            
+            <p>I'm open to Internships and Full-Time Roles — Have a question or just want to say hi? Don't hesitate to reach out!</p>
+            <form id="contact-form" action="https://formspree.io/f/mgogbolz" method="POST">
+              <div class="form-row">
+                <input type="text" name="name" placeholder="Name" required />
+                <input type="email" name="email" placeholder="Email" required />
+              </div>
+              <input type="text" name="subject" placeholder="Subject" />
+              <textarea name="message" placeholder="Message" rows="5" required></textarea>
+              <button type="submit" class="send-btn">Send Message</button>
+              <p id="form-status" class="form-status" aria-live="polite"></p>
+            </form>
+          </div>
+          <div class="map-wrap">
+            <div class="map-pin-card">
+              <strong>Bhushan Sonawane</strong><br>
+              [NBNSTIC, India]<br>
+              <span class="mail">bhushansonawane348@gmail.com</span>
+            </div>
+            <div class="map-fake">
+              <iframe
+                src="https://www.google.com/maps?q=NBN+Sinhgad+Technical+Institutes+Campus,+Pune&output=embed"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen
+                title="Location map"></iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
