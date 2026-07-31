@@ -1,1 +1,1 @@
-<h1>Portfolio Link : https://bhushansonawaneportfolio.netlify.app/</h1>
+<h2>Portfolio Link : https://bhushansonawaneportfolio.netlify.app/</h2>
