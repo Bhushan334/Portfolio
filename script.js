@@ -453,3 +453,158 @@ contactForm?.addEventListener('submit', async (e)=>{
     }`;
   document.head.appendChild(styleTag);
 })();
+
+/* =========================================================
+   FOOTER — always show the current year automatically
+========================================================= */
+(function setCopyrightYear(){
+  const yearEl = document.getElementById('copyright-year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+})();
+
+/* =========================================================
+   ZIGZAG TITLE ANIMATION — wraps each letter of every page
+   title so CSS can animate them individually:
+     - staggered letter-by-letter entrance every time the
+       page becomes active
+     - a continuous zigzag wave where each letter alternates
+       up/down relative to its neighbor
+     - hover illuminates the individual letter under the cursor
+   Runs once on load; safely recurses through nested tags
+   like <br> and <span class="accent"> without breaking them.
+========================================================= */
+(function waveTitles(){
+  function wrapLetters(root){
+    let i = 0;
+    let wordBuffer = null;
+
+    function makeLetterSpan(ch){
+      const span = document.createElement('span');
+      span.className = 'wave-letter';
+      span.textContent = ch;
+      const delay = (i * 0.085).toFixed(3);
+      const waveName = (i % 2 === 0) ? 'waveUp' : 'waveDown';
+      span.style.animation =
+        `letterEnter .6s cubic-bezier(.2,.8,.2,1) ${delay}s both, ` +
+        `${waveName} 2.2s ease-in-out infinite ${(i * 0.085 + 0.6).toFixed(3)}s`;
+      i++;
+      return span;
+    }
+
+    function walk(node){
+      if (node.nodeType === Node.TEXT_NODE){
+        const text = node.textContent;
+        if (!text) return;
+        const parent = node.parentNode;
+        for (const ch of text){
+          if (/\s/.test(ch)){
+            wordBuffer = null; // end of a word — safe break point
+            if (ch === ' ') parent.insertBefore(document.createTextNode(' '), node);
+            // other whitespace (newlines/tabs from source formatting) is dropped
+          } else {
+            if (!wordBuffer){
+              wordBuffer = document.createElement('span');
+              wordBuffer.className = 'wave-word'; // atomic unit — wraps whole, never mid-word
+              parent.insertBefore(wordBuffer, node);
+            }
+            wordBuffer.appendChild(makeLetterSpan(ch));
+          }
+        }
+        parent.removeChild(node);
+      } else if (node.nodeType === Node.ELEMENT_NODE){
+        if (node.tagName === 'BR'){ wordBuffer = null; return; }
+        Array.from(node.childNodes).forEach(walk);
+      }
+    }
+    Array.from(root.childNodes).forEach(walk);
+  }
+
+  document.querySelectorAll('.hero-text h1, .page > h1, .work-intro h1, .contact-form-wrap h1')
+    .forEach(wrapLetters);
+})();
+
+/* =========================================================
+   SIDEBAR — sliding glow indicator that tracks the active
+   nav button, in sync with the page router.
+========================================================= */
+(function navIndicator(){
+  const indicator = document.getElementById('navIndicator');
+  const buttons = Array.from(document.querySelectorAll('.nav-btn'));
+  if (!indicator || !buttons.length) return;
+  const STEP = 58; // 48px button height + 10px gap
+
+  function updateIndicator(){
+    const activeIndex = buttons.findIndex(b => b.classList.contains('active'));
+    if (activeIndex === -1) return;
+    indicator.style.transform = `translateY(${activeIndex * STEP}px)`;
+  }
+
+  updateIndicator();
+  // re-sync whenever nav-btn active classes change (goToPage toggles them)
+  const observer = new MutationObserver(updateIndicator);
+  buttons.forEach(b => observer.observe(b, { attributes:true, attributeFilter:['class'] }));
+})();
+
+/* =========================================================
+   SKILLS WORD-CLOUD — scattered floating skill words that
+   drift gently and shift with cursor position (parallax by
+   depth), matching the space/nebula aesthetic. Lightweight,
+   no WebGL needed.
+========================================================= */
+(function skillsWordcloud(){
+  const container = document.getElementById('skillsWordcloud');
+  if (!container) return;
+
+  const SKILLS = [
+    'Java','Python','C++','JavaScript','TypeScript','SQL',
+    'Spring Boot','REST APIs','Microservices','Redis',
+    'Docker','Kubernetes','AWS','EC2','S3','Lambda','DynamoDB',
+    'Git','Linux','CI/CD','System Design','OOP',
+    'TensorFlow','Pandas','NumPy','Generative AI','LLMs',
+    'React','Node.js','MongoDB','PostgreSQL','Distributed Systems',
+  ];
+
+  const words = SKILLS.map(text => {
+    const el = document.createElement('span');
+    el.textContent = text;
+    const size = 11 + Math.random() * 16; // 11px - 27px
+    const depth = 0.3 + Math.random() * 1;  // parallax strength
+    el.style.left = (4 + Math.random() * 86) + '%';
+    el.style.top = (4 + Math.random() * 86) + '%';
+    el.style.fontSize = size + 'px';
+    el.style.opacity = (0.25 + (size / 27) * 0.55).toFixed(2);
+    el.dataset.depth = depth;
+    el.style.animation = `wordDrift ${7 + Math.random()*6}s ease-in-out infinite`;
+    el.style.animationDelay = (Math.random() * 5) + 's';
+    container.appendChild(el);
+    return { el, depth, baseX: 0, baseY: 0 };
+  });
+
+  let targetX = 0, targetY = 0, curX = 0, curY = 0;
+  container.addEventListener('mousemove', (e) => {
+    const rect = container.getBoundingClientRect();
+    targetX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+    targetY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+  });
+  container.addEventListener('mouseleave', () => { targetX = 0; targetY = 0; });
+
+  function raf(){
+    requestAnimationFrame(raf);
+    curX += (targetX - curX) * 0.06;
+    curY += (targetY - curY) * 0.06;
+    words.forEach(w => {
+      const shiftX = curX * 14 * w.depth;
+      const shiftY = curY * 14 * w.depth;
+      w.el.style.transform = `translate(${shiftX}px, ${shiftY}px)`;
+    });
+  }
+  raf();
+
+  const styleTag = document.createElement('style');
+  styleTag.textContent = `
+    @keyframes wordDrift {
+      0%,100% { margin-top: 0px; }
+      50% { margin-top: -12px; }
+    }`;
+  document.head.appendChild(styleTag);
+})();
